@@ -11,6 +11,12 @@ const GET_LOGO = gql`
             text
             color
             fontSize
+            backgroundColor
+            borderColor
+            borderRadius
+            borderWidth
+            padding
+            margin
             lastUpdate
         }
     }
@@ -32,9 +38,24 @@ class ViewLogoScreen extends Component {
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
+                    const styles = {
+                        container: {
+                            fontSize: data.logo.fontSize + 'pt',
+                            color: data.logo.color,
+                            backgroundColor: data.logo.backgroundColor,
+                            borderColor: data.logo.borderColor,
+                            borderRadius: data.logo.borderRadius + "px",
+                            borderWidth: data.logo.borderThickness + "px",
+                            borderStyle: 'solid',
+                            padding: data.logo.padding + "px",
+                            margin: data.logo.margin + "px"
 
+                        }
+                    }
                     return (
                         <div className="container">
+                            <div className = "row">
+                            <div className = "col">
                             <div className="panel panel-default">
                                 <div className="panel-heading">
                                     <h4><Link to="/">Home</Link></h4>
@@ -52,6 +73,18 @@ class ViewLogoScreen extends Component {
                                         <dd>{data.logo.fontSize}</dd>
                                         <dt>Last Updated:</dt>
                                         <dd>{data.logo.lastUpdate}</dd>
+                                        <dt>Background Color:</dt>
+                                        <dd>{data.logo.backgroundColor}</dd>
+                                        <dt>Border Color:</dt>
+                                        <dd>{data.logo.borderColor}</dd>
+                                        <dt>Border Radius:</dt>
+                                        <dd>{data.logo.borderRadius}</dd>
+                                        <dt>Border Width:</dt>
+                                        <dd>{data.logo.borderWidth}</dd>
+                                        <dt>Padding:</dt>
+                                        <dd>{data.logo.padding}</dd>
+                                        <dt>Margin:</dt>
+                                        <dd>{data.logo.margin}</dd>
                                     </dl>
                                     <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
                                         {(removeLogo, { loading, error }) => (
@@ -70,7 +103,13 @@ class ViewLogoScreen extends Component {
                                         )}
                                     </Mutation>
                                 </div>
-                            </div>
+                            </div></div>
+                            <div className="col" style={{overflow: 'auto'}}>
+                                <div style={ styles.container  } >
+                                    {data.logo.text}
+                                </div>
+                                
+                            </div></div>
                         </div>
                     );
                 }}
