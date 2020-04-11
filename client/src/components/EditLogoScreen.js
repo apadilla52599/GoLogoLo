@@ -62,6 +62,8 @@ class EditLogoScreen extends Component {
                         <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
                             {(updateLogo, { loading, error }) => (
                                 <div className="container">
+                                    <div className = "row">
+                                    <div className = "col-sm-4">
                                     <div className="panel panel-default">
                                         <div className="panel-heading">
                                             <h4><Link to="/">Home</Link></h4>
@@ -97,7 +99,7 @@ class EditLogoScreen extends Component {
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="fontSize">Font Size:</label>
-                                                    <input type="text" className="form-control" name="fontSize" ref={node => {
+                                                    <input type="number" className="form-control" name="fontSize" ref={node => {
                                                         fontSize = node;
                                                     }} placeholder="Font Size" defaultValue={data.logo.fontSize} />
                                                 </div>
@@ -115,25 +117,25 @@ class EditLogoScreen extends Component {
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="borderRadius">Border Radius:</label>
-                                                    <input type="text" className="form-control" name="borderRadius" ref={node => {
+                                                    <input type="number" className="form-control" name="borderRadius" ref={node => {
                                                         borderRadius = node;
                                                     }} placeholder="Border Radius" defaultValue={data.logo.borderRadius} />
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="borderWidth">Border Width:</label>
-                                                    <input type="text" className="form-control" name="borderWidth" ref={node => {
+                                                    <input type="number" className="form-control" name="borderWidth" ref={node => {
                                                         borderWidth = node;
                                                     }} placeholder="Border Width" defaultValue={data.logo.borderWidth} />
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="padding">Padding:</label>
-                                                    <input type="text" className="form-control" name="padding" ref={node => {
+                                                    <input type="number" className="form-control" name="padding" ref={node => {
                                                         padding = node;
                                                     }} placeholder="Padding" defaultValue={data.logo.padding} />
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="margin">Margin:</label>
-                                                    <input type="text" className="form-control" name="margin" ref={node => {
+                                                    <input type="number" className="form-control" name="margin" ref={node => {
                                                         margin = node;
                                                     }} placeholder="Margin" defaultValue={data.logo.margin} />
                                                 </div>
@@ -142,6 +144,11 @@ class EditLogoScreen extends Component {
                                             {loading && <p>Loading...</p>}
                                             {error && <p>Error :( Please try again</p>}
                                         </div>
+                                    </div>
+                                    </div>
+                                    <div className = "col-sm-8">
+                                        hey 
+                                    </div>
                                     </div>
                                 </div>
                             )}

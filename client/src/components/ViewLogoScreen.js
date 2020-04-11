@@ -56,10 +56,10 @@ class ViewLogoScreen extends Component {
                         <div className="container">
                             <div className = "row">
                             <div className = "col">
-                            <div className="panel panel-default">
-                                <div className="panel-heading">
+                            <div className="card">
+                                <div className="card-header">
                                     <h4><Link to="/">Home</Link></h4>
-                                    <h3 className="panel-title">
+                                    <h3 className="card-title">
                                         View Logo
                                     </h3>
                                 </div>
