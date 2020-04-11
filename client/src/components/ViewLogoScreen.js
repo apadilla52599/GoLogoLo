@@ -45,7 +45,7 @@ class ViewLogoScreen extends Component {
                             backgroundColor: data.logo.backgroundColor,
                             borderColor: data.logo.borderColor,
                             borderRadius: data.logo.borderRadius + "px",
-                            borderWidth: data.logo.borderThickness + "px",
+                            borderWidth: data.logo.borderWidth + "px",
                             borderStyle: 'solid',
                             padding: data.logo.padding + "px",
                             margin: data.logo.margin + "px"
@@ -55,7 +55,7 @@ class ViewLogoScreen extends Component {
                     return (
                         <div className="container">
                             <div className = "row">
-                            <div className = "col">
+                            <div className = "col-sm-4">
                             <div className="card">
                                 <div className="card-header">
                                     <h4><Link to="/">Home</Link></h4>
@@ -104,7 +104,7 @@ class ViewLogoScreen extends Component {
                                     </Mutation>
                                 </div>
                             </div></div>
-                            <div className="col" style={{overflow: 'auto'}}>
+                            <div className="col-sm-8" style={{overflow: 'auto'}}>
                                 <div style={ styles.container  } >
                                     {data.logo.text}
                                 </div>
