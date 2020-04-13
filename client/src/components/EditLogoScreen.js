@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 
@@ -166,9 +166,9 @@ class EditLogoScreen extends Component {
                                 <div className="container">
                                     <div className = "row">
                                     <div className = "col-sm-4">
-                                    <div className="panel panel-default">
-                                        <div className="panel-heading">
-                                            <h4><Link to="/">Home</Link></h4>
+                                    <div className="card">
+                                        <div className="card-header">
+                                            <a href="/" className="btn btn-light" > Home </a>
                                             <h3 className="panel-title">
                                                 Edit Logo
                                         </h3>

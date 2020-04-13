@@ -58,7 +58,7 @@ class ViewLogoScreen extends Component {
                             <div className = "col-sm-4">
                             <div className="card">
                                 <div className="card-header">
-                                    <h4><Link to="/">Home</Link></h4>
+                                    <a href="/" className="btn btn-light" > Home </a>
                                     <h3 className="card-title">
                                         View Logo
                                     </h3>

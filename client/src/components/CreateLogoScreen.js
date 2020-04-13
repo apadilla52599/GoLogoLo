@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const ADD_LOGO = gql`
     mutation AddLogo(
@@ -138,9 +138,9 @@ class CreateLogoScreen extends Component {
                     <div className="container">
                         <div className = "row">
                         <div className = "col-sm-4">
-                        <div className="panel panel-default">
-                            <div className="panel-heading">
-                                <h4><Link to="/">Home</Link></h4>
+                        <div className="card">
+                            <div className="card-header">
+                                <a href="/" className="btn btn-light" > Home </a>
                                 <h3 className="panel-title">
                                     Create Logo
                             </h3>
