@@ -1,7 +1,16 @@
 var mongoose = require('mongoose');
 
+// var textSchema = new mongoose.Schema({
+//   textName: String,
+//   color: String,
+//   fontSize: {type: Number, min: 2, max:144},
+//   topPos:{type: Number, min: 2, max:144},
+//   rightPos: {type: Number, min: 2, max:144}
+// });
+
 var LogoSchema = new mongoose.Schema({
   id: String,
+  textList: Array,
   text: String,
   color: String,
   backgroundColor: String,

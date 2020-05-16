@@ -5,6 +5,7 @@ import { Mutation } from "react-apollo";
 
 const ADD_LOGO = gql`
     mutation AddLogo(
+
         $text: String!,
         $color: String!,
         $backgroundColor: String!,
@@ -15,6 +16,7 @@ const ADD_LOGO = gql`
         $padding: Int!
         $margin: Int!) {
         addLogo(
+
             text: $text,
             color: $color,
             backgroundColor: $backgroundColor,

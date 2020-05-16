@@ -8,6 +8,7 @@ const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
             _id
+
             text
             color
             fontSize
