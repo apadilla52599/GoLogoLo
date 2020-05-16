@@ -67,10 +67,10 @@ var textType = new GraphQLObjectType({
             fontSize: {
                 type: GraphQLInt
             },
-            topPos: {
+            top: {
                 type: GraphQLInt
             },
-            rightPos: {
+            right: {
                 type: GraphQLInt
             }
         }
@@ -90,10 +90,10 @@ var textTypeInput = new GraphQLInputObjectType({
             fontSize: {
                 type: GraphQLInt
             },
-            topPos: {
+            top: {
                 type: GraphQLInt
             },
-            rightPos: {
+            right: {
                 type: GraphQLInt
             }
         }

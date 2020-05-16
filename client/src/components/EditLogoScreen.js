@@ -7,7 +7,7 @@ const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
             _id
-            textList {textName, color, fontSize, topPos, rightPos}
+            textList {textName, color, fontSize, top, right}
             text
             color
             backgroundColor
@@ -156,15 +156,14 @@ class EditLogoScreen extends Component {
                 borderStyle: 'solid',
                 padding: this.state.padding + "px",
                 margin: this.state.margin + "px"
-            },
-            container2: {
-                position: "absolute",
-                top: "0px",
-                right: "0px",
-                height: "500px",
-                color: this.state.textColor,
-                fontSize: this.state.fontSize + "pt" ,
             }
+
+        }
+        console.log(styles)
+        let templist = []
+        for(let i = 0; i < this.state.textList.length; i++){
+            templist.push(this.state.textList[i]);
+            templist[i].position = "absolute";
         }
         return (
             <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
@@ -172,8 +171,23 @@ class EditLogoScreen extends Component {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     if(this.state.text === null){
+                        let list = [
+                        {
+                            "textName": "aatext123",
+                            "color": "#ff0000",
+                            "fontSize": 32,
+                            "top": 0,
+                            "right": 0 
+                          },{
+                            "textName": "difftext123",
+                            "color": "#ff0000",
+                            "fontSize": 32,
+                            "top": 500,
+                            "right": 0 
+                          }
+                        ]
 
-                        this.setState({text: data.logo.text, textList: [data.logo.text], rendered: true, editText: data.logo.text, textColor: data.logo.color, fontSize: data.logo.fontSize, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin}) //CHANGE OCCURED
+                        this.setState({text: data.logo.text, textList: list, rendered: true, editText: data.logo.text, textColor: data.logo.color, fontSize: data.logo.fontSize, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin}) //CHANGE OCCURED
                         // you changed textList to data.logo.text when it should be data.logo.textList, this is only working because you only have one text.
                     }
                     return (
@@ -267,11 +281,10 @@ class EditLogoScreen extends Component {
                                     </div>
                                     <div className = "col-sm-8">
                                         <div style={ styles.container } >
-                                            {this.state.textList[0]}
-                                        </div>
-                                        <div style={ styles.container2 } >
                                             {this.state.text}
                                         </div>
+                                        
+                                        {this.state.textList.map(textobj => (<div  style={textobj}> {textobj.textName} </div>))}
                                     </div>
                                     </div>
                                 </div>
