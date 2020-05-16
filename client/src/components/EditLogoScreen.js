@@ -188,7 +188,7 @@ class EditLogoScreen extends Component {
                         ]
 
                         this.setState({text: data.logo.text, textList: list, rendered: true, editText: data.logo.text, textColor: data.logo.color, fontSize: data.logo.fontSize, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin}) //CHANGE OCCURED
-                        // you changed textList to data.logo.text when it should be data.logo.textList, this is only working because you only have one text.
+                        /// you changed textList to data.logo.text when it should be data.logo.textList, this is only working because you only have one text.
                     }
                     return (
                         <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
