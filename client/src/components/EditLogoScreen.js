@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component} from 'react';
 // import { Link } from 'react-router-dom';
+import  Dropdown  from 'react-dropdown';
+import 'react-dropdown/style.css';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 
@@ -59,7 +61,9 @@ class EditLogoScreen extends Component {
         // VALUES HERE
         this.state = { 
             text: null,
+            texts: [],
             textList: [],
+            edTextList: [],
             rendered: false,
             flag: false,
             editText: null,
@@ -141,6 +145,10 @@ class EditLogoScreen extends Component {
         this.setState({margin: event.target.value})
     }
 
+    handleTextSelect = (event) =>{
+        console.log("brain")
+    }
+
     render() {
         let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
         const styles = {
@@ -160,11 +168,26 @@ class EditLogoScreen extends Component {
 
         }
         console.log(styles)
-        let templist = []
-        for(let i = 0; i < this.state.textList.length; i++){
-            templist.push(this.state.textList[i]);
-            templist[i].position = "absolute";
+        if(this.state.edTextList.length === 0 && this.state.textList.length !== 0){
+            this.setState({edTextList: this.state.textList})
         }
+        var templist = JSON.parse(JSON.stringify(this.state.edTextList))
+        var tempSelect = []
+        for(let i = 0; i < this.state.edTextList.length; i++){
+            if(templist[i].position !== "absolute"){
+            templist[i].position = "absolute";
+            }
+            tempSelect.push(JSON.parse(JSON.stringify(this.state.edTextList[i].textName)))
+        }
+        if(this.state.texts.length !== this.state.edTextList.length){
+            this.setState({texts: tempSelect})
+        }
+        console.log(templist)
+        
+        console.log(tempSelect)
+        console.log(this.state.edTextList)
+        // console.log(this.state.textList)
+
         return (
             <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
                 {({ loading, error, data }) => {
@@ -186,7 +209,7 @@ class EditLogoScreen extends Component {
                             "right": 0 
                           }
                         ]
-
+                        //// CHANGE
                         this.setState({text: data.logo.text, textList: list, rendered: true, editText: data.logo.text, textColor: data.logo.color, fontSize: data.logo.fontSize, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin}) //CHANGE OCCURED
                         /// you changed textList to data.logo.text when it should be data.logo.textList, this is only working because you only have one text.
                     }
@@ -206,7 +229,10 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body">                                            
                                             <form onSubmit={e => {
                                                 e.preventDefault();
-                                                updateLogo({ variables: { id: data.logo._id, text: text.value, textList: [{}], color: color.value, backgroundColor: backgroundColor.value,fontSize: parseInt(fontSize.value), borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
+                                                // BIG CHANGE                                          vvvvvvvvvvvvvvvvvvvv THERE 
+                                                updateLogo({ variables: { id: data.logo._id, textList: this.state.edTextList, text: text.value , color: color.value, backgroundColor: backgroundColor.value,fontSize: parseInt(fontSize.value), borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
+                                                // EVENTUALLY YOU WANNA DO WHAT THEYRE DOING DOWN THERE
+                                                // VVVVVVVVVVVVV
                                                 text.value = "";
                                                 color.value = "";
                                                 fontSize.value = "";
@@ -217,7 +243,12 @@ class EditLogoScreen extends Component {
                                                 padding.value = "";
                                                 margin.value = "";
                                             }}>
-                                                <button className="btn btn-light" > ADD NEW TEXT(NOT OPERABLE YET)</button>
+                                                {/* <DropdownMenu userName="cheis">
+                                                    <MenuItem text="ok boomER"></MenuItem>
+                                                </DropdownMenu> */}
+                                                <label>Select a text:</label>
+                                                <Dropdown onChange={this.handleTextSelect} options={this.state.texts} placeholder={this.state.text}>
+                                                </Dropdown>
                                                 <div className="form-group">
                                                     <label htmlFor="text">Text:</label>
                                                     <input type="text" value = {this.state.text} onChange={this.editingText} className="form-control" name="text" ref={node => {
@@ -284,7 +315,7 @@ class EditLogoScreen extends Component {
                                             {this.state.text}
                                         </div>
                                         
-                                        {this.state.textList.map(textobj => (<div  style={textobj}> {textobj.textName} </div>))}
+                                        {templist.map(textobj => (<div  style={textobj}> {textobj.textName} </div>))}
                                     </div>
                                     </div>
                                 </div>
