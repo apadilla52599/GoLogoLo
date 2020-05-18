@@ -9,7 +9,11 @@
     "graphql-tag": "^2.10.1",
     "react": "^16.8.6",
     "react-apollo": "^2.5.4",
+    "react-bootstrap-dropdown": "^0.3.0",
+    "react-bootstrap-dropdown-menu": "^1.1.15",
     "react-dom": "^16.8.6",
+    "react-dropdown": "^1.7.0",
+    "react-dropdown-button": "^1.0.11",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^2.1.8"
   },

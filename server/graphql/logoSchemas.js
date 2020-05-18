@@ -58,6 +58,9 @@ var textType = new GraphQLObjectType({
     name: 'texts',
     fields: function (){
         return {
+            id: {
+                type: GraphQLInt
+            },
             textName: {
                 type: GraphQLString
             },
@@ -81,6 +84,9 @@ var textTypeInput = new GraphQLInputObjectType({
     name: 'textsInput',
     fields: function (){
         return {
+            id: {
+                type: GraphQLInt
+            },
             textName: {
                 type: GraphQLString
             },

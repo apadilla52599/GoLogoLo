@@ -8,7 +8,7 @@ const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
             _id
-
+            textList {id textName color fontSize top right}
             text
             color
             fontSize
@@ -32,6 +32,7 @@ const DELETE_LOGO = gql`
 `;
 
 class ViewLogoScreen extends Component {
+    
 
     render() {
         return (
@@ -41,6 +42,9 @@ class ViewLogoScreen extends Component {
                     if (error) return `Error! ${error.message}`;
                     const styles = {
                         container: {
+                            // CHANGE
+                            height: "400px",
+                            width: "400px",
                             fontSize: data.logo.fontSize + 'pt',
                             color: data.logo.color,
                             backgroundColor: data.logo.backgroundColor,
@@ -53,6 +57,7 @@ class ViewLogoScreen extends Component {
 
                         }
                     }
+                    console.log(this.state)
                     return (
                         <div className="container">
                             <div className = "row">
@@ -66,12 +71,8 @@ class ViewLogoScreen extends Component {
                                 </div>
                                 <div className="panel-body">
                                     <dl>
-                                        <dt>Text:</dt>
-                                        <dd>{data.logo.text}</dd>
-                                        <dt>Color:</dt>
-                                        <dd>{data.logo.color}</dd>
-                                        <dt>Font Size:</dt>
-                                        <dd>{data.logo.fontSize}</dd>
+                                        <dt>Texts:</dt>
+                                        <dd>{data.logo.textList.length}</dd>
                                         <dt>Last Updated:</dt>
                                         <dd>{data.logo.lastUpdate}</dd>
                                         <dt>Background Color:</dt>
@@ -107,9 +108,8 @@ class ViewLogoScreen extends Component {
                             </div></div>
                             <div className="col-sm-8" style={{overflow: 'auto'}}>
                                 <div style={ styles.container  } >
-                                    {data.logo.text}
                                 </div>
-                                
+                                {data.logo.textList.map(textobj => (<div  style={{color: textobj.color, fontSize: textobj.fontSize, position: "absolute", top: textobj.top + "px", right: textobj.right + "px"}}> {textobj.textName} </div>))}
                             </div></div>
                         </div>
                     );
