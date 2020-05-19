@@ -11,7 +11,10 @@ const GET_LOGO = gql`
             textList {id textName color fontSize top right}
             text
             color
+            imgList {id, imgURL, height, width, top, right}
             fontSize
+            height
+            width
             backgroundColor
             borderColor
             borderRadius
@@ -43,8 +46,8 @@ class ViewLogoScreen extends Component {
                     const styles = {
                         container: {
                             // CHANGE
-                            height: "400px",
-                            width: "400px",
+                            height: data.logo.height,
+                            width: data.logo.width,
                             fontSize: data.logo.fontSize + 'pt',
                             color: data.logo.color,
                             backgroundColor: data.logo.backgroundColor,
@@ -57,7 +60,6 @@ class ViewLogoScreen extends Component {
 
                         }
                     }
-                    console.log(this.state)
                     return (
                         <div className="container">
                             <div className = "row">
@@ -73,8 +75,14 @@ class ViewLogoScreen extends Component {
                                     <dl>
                                         <dt>Texts:</dt>
                                         <dd>{data.logo.textList.length}</dd>
+                                        <dt>Images:</dt>
+                                        <dd>{data.logo.imgList.length}</dd>
                                         <dt>Last Updated:</dt>
                                         <dd>{data.logo.lastUpdate}</dd>
+                                        <dt>Height:</dt>
+                                        <dd>{data.logo.Height}</dd>
+                                        <dt>Width:</dt>
+                                        <dd>{data.logo.width}</dd>
                                         <dt>Background Color:</dt>
                                         <dd>{data.logo.backgroundColor}</dd>
                                         <dt>Border Color:</dt>
@@ -110,6 +118,7 @@ class ViewLogoScreen extends Component {
                                 <div style={ styles.container  } >
                                 </div>
                                 {data.logo.textList.map(textobj => (<div  style={{color: textobj.color, fontSize: textobj.fontSize, position: "absolute", top: textobj.top + "px", right: textobj.right + "px"}}> {textobj.textName} </div>))}
+                                {data.logo.imgList.map(img =>(<img id={img.id} onClick={this.handleImgSelect} src={img.imgURL} style={{position: "absolute", height: img.height, width: img.width, top: img.top, right: img.right}}></img>))}
                             </div></div>
                         </div>
                     );

@@ -13,8 +13,11 @@ const GET_LOGO = gql`
             textList {id textName color fontSize top right}
             text
             color
+            imgList {id, imgURL, height, width, top, right}
             backgroundColor
             fontSize
+            height
+            width
             borderColor
             borderRadius
             borderWidth
@@ -30,8 +33,11 @@ const UPDATE_LOGO = gql`
         $textList: [textsInput]!,
         $text: String!,
         $color: String!,
+        $imgList: [imgInput]!,
         $backgroundColor: String!
         $fontSize: Int!
+        $height: Int!,
+        $width: Int!,
         $borderColor: String!
         $borderRadius: Int!
         $borderWidth: Int!
@@ -42,8 +48,11 @@ const UPDATE_LOGO = gql`
                 textList: $textList
                 text: $text,
                 color: $color,
+                imgList: $imgList,
                 backgroundColor: $backgroundColor,
                 fontSize: $fontSize
+                height: $height
+                width: $width
                 borderColor: $borderColor
                 borderRadius: $borderRadius
                 borderWidth: $borderWidth
@@ -66,6 +75,15 @@ class EditLogoScreen extends Component {
             currentTextID: 0,
             top: 100,
             right: 250,
+            imgList: [],
+            imgURL: "",
+            imgTop: 250,
+            imgRight: 250,
+            imgHeight: 200,
+            imgWidth: 200,
+            currentImgID: 0,
+            height: "400px",
+            width: "400px",
             flag: false,
             textColor : "FE0300",
             fontSize : null ,
@@ -146,6 +164,14 @@ class EditLogoScreen extends Component {
         this.setState({margin: event.target.value})
     }
 
+    handleHeightChange = (event) =>{
+        this.setState({height: event.target.value})
+    }
+
+    handleWidthChange = (event) =>{
+        this.setState({width: event.target.value})
+    }
+
     handleTextSelect = (event) =>{
         var res = (''+event.value).split(', ')
         let string= res[0].replace(',', '')
@@ -202,20 +228,115 @@ class EditLogoScreen extends Component {
         let copy = this.state.textList.slice()
         copy.push(text)
         console.log(this.state.textList)
-        console.log(this.state.copy)
-        this.setState({textList: copy, currentTextID: id})
-        // and then select it
+        console.log(copy)
+        this.setState({textList: copy, currentTextID: id, text: text.textName, fontSize: text.fontSize, textColor: text.color, top: text.top, right: text.right})
+    }
+
+    handleDeleteText = (event) =>{
+        if(this.state.textList.length > 1){
+            var temparr = this.state.textList.slice()
+            var index = 0;
+            for(let i = 0; i <this.state.textList.length;i++){
+                if(this.state.currentTextID === this.state.textList[i].id){
+                    index = i
+                }
+            }
+            temparr.splice(index,1)
+            this.setState({textList: temparr})
+            if(this.state.textList.length > 1){
+            this.setTextProperies(0);
+            }
+        }
+    }
+    
+    handleDeleteImg = (event) =>{
+        if(this.state.imgList.length > 0){
+        var temparr = this.state.imgList.slice()
+        var index = 0;
+        for(let i = 0; i <this.state.imgList.length;i++){
+            if(this.state.currentImgID === this.state.imgList[i].id){
+                index = i
+            }
+        }
+        temparr.splice(index,1)
+        this.setState({imgList: temparr})
+        
+        if(temparr.length >1){
+        this.setTextProperies(0);
+        }
+    }
+    }
+
+    handleImgSelect = (event) => {
+        console.log("CLICKED");
+        this.setState({currentImgID: parseInt(event.currentTarget.id)})
+        console.log(event.currentTarget)
+        let tempheight = 0
+        let tempwidth = 0
+        let tempposx = 0
+        let tempposy = 0
+        for(let i = 0; i < this.state.imgList.length;i++){
+            if( parseInt(event.currentTarget.id) === this.state.imgList[i].id){
+                tempheight = this.state.imgList[i].height
+                tempwidth = this.state.imgList[i].width
+                tempposx = this.state.imgList[i].right
+                tempposy = this.state.imgList[i].top
+            }
+        }
+        this.setState({imgHeight: tempheight, imgWidth: tempwidth, imgTop: tempposy, imgRight: tempposx})
+
+    }
+
+    handleURLChange = (event) => {
+        // console.log('URL CHANGE')
+        console.log(event.target.value)
+        this.setState({imgURL: event.target.value})
+    }
+
+    handleNewImage = (event) => {
+        let temp = 0
+        for(let i = 0; i< this.state.imgList.length; i++){
+            if(this.state.imgList[i].id > temp){
+                temp = this.state.imgList[i].id
+            }
+        }
+        let id = temp + 1
+        if(this.state.imgURL !== ""){
+            let img = {id: id, imgURL: this.state.imgURL, height: 200, width: 200, top: 250, right: 250 }
+            let copy = this.state.imgList.slice()
+            copy.push(img)
+            this.setState({imgList: copy, currentImgID: id})
+            console.log("added")
+        }
+
+    }
+
+    handleImgTopChange = (event) =>{
+        console.log("in top change")
+        this.setState({imgTop: event.target.value, imgList: this.state.imgList.map(img=>{img.id === this.state.currentImgID ? img.top = parseInt(event.target.value): console.log() ; return img})})
+    }
+
+    handleImgRightChange = (event) =>{
+        this.setState({imgRight: event.target.value, imgList: this.state.imgList.map(img=>{img.id === this.state.currentImgID ? img.right = parseInt(event.target.value): console.log() ; return img})})
+    }
+
+    handleImgHeightChange = (event) =>{
+        this.setState({imgHeight: event.target.value, imgList: this.state.imgList.map(img=>{img.id === this.state.currentImgID ? img.height = parseInt(event.target.value): console.log() ; return img})})
+    }
+
+    handleImgWidthChange = (event) =>{
+        this.setState({imgWidth: event.target.value, imgList: this.state.imgList.map(img=>{img.id === this.state.currentImgID ? img.width = parseInt(event.target.value): console.log() ; return img})})
     }
 
     
 
     render() {
-        let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin;
+        let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, right, top, height, width;
         const styles = {
             container: {
                 //CHANGE
-                height: "400px",
-                width: "400px",
+                height: this.state.height + "px",
+                width: this.state.width + "px",
                 color: this.state.textColor,
                 fontSize: this.state.fontSize + "pt" ,
                 backgroundColor: this.state.backgroundColor,
@@ -235,13 +356,11 @@ class EditLogoScreen extends Component {
                     if (error) return `Error! ${error.message}`;
                     if(this.state.flag === false){
                         //// CHANGE                         vvvvvvvvvvvvv                             vvvvvvvvv this should end up being data.logo.textList[0]
-                        this.setState({text: data.logo.text, flag: true, textList: data.logo.textList, top : data.logo.textList[0].top, right: data.logo.textList[0].right, textColor: data.logo.color, fontSize: data.logo.fontSize, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin}) //CHANGE OCCURED
+                        this.setState({text: data.logo.text, flag: true, textList: data.logo.textList, imgList: data.logo.imgList, top : data.logo.textList[0].top, right: data.logo.textList[0].right, textColor: data.logo.color, fontSize: data.logo.fontSize, height: data.logo.height, width: data.logo.width, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin}) //CHANGE OCCURED
                         // this.setState({...data.logo}, () => console.log(this.state))
                         /// you changed textList to data.logo.text when it should be data.logo.textList, this is only working because you only have one text.
                         
                     }
-                    console.log('showing textList')
-                    console.log(this.state.textList)
                     return (
                         <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
                             {(updateLogo, { loading, error }) => (
@@ -267,7 +386,7 @@ class EditLogoScreen extends Component {
                                                     delete item.__typename
                                                 ))
                                                 // BIG CHANGE                                          vvvvvvvvvvvvvvvvvvvv THERE 
-                                                updateLogo({ variables: { id: data.logo._id, textList: cleaned, text: this.state.text , color: this.state.textColor, backgroundColor: backgroundColor.value,fontSize: parseInt(this.state.fontSize), borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
+                                                updateLogo({ variables: { id: data.logo._id, textList: cleaned, text: this.state.text , color: this.state.textColor, imgList: this.state.imgList,backgroundColor: backgroundColor.value,fontSize: parseInt(this.state.fontSize), height: parseInt(this.state.height), width: parseInt(this.state.width), borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
                                                 // EVENTUALLY YOU WANNA DO WHAT THEYRE DOING DOWN THERE
                                                 // VVVVVVVVVVVVV
                                                 text.value = "";
@@ -279,12 +398,17 @@ class EditLogoScreen extends Component {
                                                 borderWidth.value = "";
                                                 padding.value = "";
                                                 margin.value = "";
+                                                right.value = "";
+                                                top.value = "";
+                                                height.value = '';
+                                                width.value= "";
                                             }}>
                                                 <label>Select a text:</label>
                                                 <Dropdown onChange={this.handleTextSelect} options={this.state.textList.map(text => [text.textName, ', '+ text.id ] )} placeholder={this.state.text}>
                                                 </Dropdown>
                                                 <label>Or add new: </label>
-                                                <a className="btn btn-light" onClick={this.handleNew}>ADD NEW</a>
+                                                <button type ="button" className="btn btn-light" onClick={this.handleNew}>ADD NEW</button>
+                                                <button type = "button" className="btn btn-light" onClick={this.handleDeleteText}>DELETE TEXT</button>
                                                 <div className="form-group">
                                                     <label htmlFor="text">Text:</label>
                                                     <input type="text" value = {this.state.text} onChange={this.editingText} className="form-control" name="text" ref={node => {
@@ -306,14 +430,46 @@ class EditLogoScreen extends Component {
                                                 <div className="form-group">
                                                     <label htmlFor="right">postion x:</label>
                                                     <input type="number" className="form-control" value = {this.state.right} onChange = {this.handleRightChange} name="right" ref={node => {
-                                                        fontSize = node;
-                                                    }} placeholder="Font Size" />
+                                                        right = node;
+                                                    }} placeholder="position x" />
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="top">position y:</label>
                                                     <input type="number" className="form-control" value = {this.state.top} onChange = {this.handleTopChange} name="top" ref={node => {
-                                                        fontSize = node;
-                                                    }} placeholder="Font Size" />
+                                                        top = node;
+                                                    }} placeholder="position y" />
+                                                </div>
+                                                <label>Enter a URL for an image! (click img to change properties)</label>
+                                                <input type="text" onChange={this.handleURLChange} placeholder="Valid Image URL"></input>
+                                                <button type="button" className="btn btn-light" onClick={this.handleNewImage}>ADD</button>
+                                                <button type="button" className="btn btn-light" onClick={this.handleDeleteImg}>DELETE</button>
+                                                <br></br>
+                                                <label>Change img position x: </label>
+                                                <br></br>
+                                                <input type="Number" value = {this.state.imgRight} onChange={this.handleImgRightChange} placeholder="Change position x of image"></input>
+                                                <br></br>
+                                                <label>Change img position y: </label>
+                                                <br></br>
+                                                <input type="Number" value = {this.state.imgTop} onChange={this.handleImgTopChange} placeholder="Change position y of image"></input>
+                                                <br></br>
+                                                <label>Change img height: </label>
+                                                <br></br>
+                                                <input type="Number" value = {this.state.imgHeight} onChange={this.handleImgHeightChange} placeholder="Change height of image"></input>
+                                                <br></br>
+                                                <label>Change img width: </label>
+                                                <br></br>
+                                                <input type="Number" value = {this.state.imgWidth} onChange={this.handleImgWidthChange} placeholder="Change qidth of image"></input>
+                                                <div className="form-group">
+                                                    <label htmlFor="height">logo height:</label>
+                                                    <input type="number" className="form-control" value = {this.state.height} onChange = {this.handleHeightChange} name="height" ref={node => {
+                                                        height = node;
+                                                    }} placeholder="logo height" />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="width">logo width:</label>
+                                                    <input type="number" className="form-control" value = {this.state.width} onChange = {this.handleWidthChange} name="width" ref={node => {
+                                                        width = node;
+                                                    }} placeholder="logo width" />
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="backgroundColor">Background Color:</label>
@@ -361,7 +517,9 @@ class EditLogoScreen extends Component {
                                     <div className = "col-sm-8">
                                         <div style={ styles.container } >
                                         </div>
+                                        {console.log(this.state.imgList)}
                                         {this.state.textList.map(textobj => (<div  style={{color: textobj.color, fontSize: textobj.fontSize, position: "absolute", top: textobj.top + "px", right: textobj.right + "px"}}> {textobj.textName} </div>))}
+                                        {this.state.imgList.map(img =>(<img id={img.id} onClick={this.handleImgSelect} src={img.imgURL} style={{position: "absolute", height: img.height, width: img.width, top: img.top, right: img.right}}></img>))}
                                     </div>
                                     </div>
                                 </div>

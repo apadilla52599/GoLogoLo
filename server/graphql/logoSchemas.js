@@ -20,11 +20,20 @@ var logoType = new GraphQLObjectType({
             textList:{
                 type: GraphQLList(textType)
             },
+            imgList:{
+                type: GraphQLList(imgType)
+            },
             text: {
                 type: GraphQLString
             },
             color: {
                 type: GraphQLString
+            },
+            height: {
+                type: GraphQLInt
+            },
+            width: {
+                type: GraphQLInt
             },
             backgroundColor: {
                 type: GraphQLString
@@ -80,6 +89,32 @@ var textType = new GraphQLObjectType({
     }
 });
 
+var imgType = new GraphQLObjectType({
+    name: 'img',
+    fields: function (){
+        return {
+            id: {
+                type: GraphQLInt
+            },
+            imgURL: {
+                type: GraphQLString
+            },
+            height: {
+                type: GraphQLInt
+            },
+            width: {
+                type: GraphQLInt
+            },
+            top: {
+                type: GraphQLInt
+            },
+            right: {
+                type: GraphQLInt
+            }
+        }
+    }
+});
+
 var textTypeInput = new GraphQLInputObjectType({
     name: 'textsInput',
     fields: function (){
@@ -105,6 +140,88 @@ var textTypeInput = new GraphQLInputObjectType({
         }
     }
 });
+
+var imgTypeInput = new GraphQLInputObjectType({
+    name: 'imgInput',
+    fields: function (){
+        return {
+            id: {
+                type: GraphQLInt
+            },
+            imgURL: {
+                type: GraphQLString
+            },
+            height: {
+                type: GraphQLInt
+            },
+            width: {
+                type: GraphQLInt
+            },
+            top: {
+                type: GraphQLInt
+            },
+            right: {
+                type: GraphQLInt
+            }
+        }
+    }
+});
+
+
+
+// var imgType = new GraphQLObjectType({
+//     name: 'img',
+//     fields: function(){
+//         return{
+//             id: {
+//                 GraphQLInt
+//             },
+//             imgURL: {
+//                 GraphQLString
+//             },
+//             height: {
+//                 GraphQLInt
+//             },
+//             width: {
+//                 GraphQLInt
+//             },
+//             top: {
+//                 GraphQLInt
+//             },
+//             right: {
+//                 GraphQLInt
+//             }
+//         }
+//     }
+
+// });
+
+// var imgTypeInput = new GraphQLInputObjectType({
+//     name: 'imgInput',
+//     fields: function(){
+//         return{
+//             id: {
+//                 GraphQLInt
+//             },
+//             imgURL: {
+//                 GraphQLString
+//             },
+//             height: {
+//                 GraphQLInt
+//             },
+//             width: {
+//                 GraphQLInt
+//             },
+//             top: {
+//                 GraphQLInt
+//             },
+//             right: {
+//                 GraphQLInt
+//             }
+//         }
+//     }
+
+// });
 
 var queryType = new GraphQLObjectType({
     name: 'Query',
@@ -156,10 +273,19 @@ var mutation = new GraphQLObjectType({
                     color: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    imgList: {
+                        type: new GraphQLNonNull(GraphQLList(imgTypeInput))
+                    },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     fontSize: {
+                        type: new GraphQLNonNull(GraphQLInt)
+                    },
+                    height : {
+                        type: new GraphQLNonNull(GraphQLInt)
+                    },
+                    width : {
                         type: new GraphQLNonNull(GraphQLInt)
                     },
                     borderColor : {
@@ -203,10 +329,19 @@ var mutation = new GraphQLObjectType({
                     color: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    imgList: {
+                        type: new GraphQLNonNull(GraphQLList(imgTypeInput))
+                    },
                     backgroundColor: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     fontSize: {
+                        type: new GraphQLNonNull(GraphQLInt)
+                    },
+                    height : {
+                        type: new GraphQLNonNull(GraphQLInt)
+                    },
+                    width : {
                         type: new GraphQLNonNull(GraphQLInt)
                     },
                     borderColor : {
@@ -226,7 +361,7 @@ var mutation = new GraphQLObjectType({
                     }
                 },
                 resolve(root, params) {
-                    return LogoModel.findByIdAndUpdate(params.id, { textList: params.textList, text: params.text, color: params.color, backgroundColor: params.backgroundColor, fontSize: params.fontSize, borderColor: params.borderColor, borderRadius: params.borderRadius, borderWidth: params.borderWidth, padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {
+                    return LogoModel.findByIdAndUpdate(params.id, { textList: params.textList, text: params.text, color: params.color, imgList: params.imgList, backgroundColor: params.backgroundColor, fontSize: params.fontSize, height: params.height, width: params.width, borderColor: params.borderColor, borderRadius: params.borderRadius, borderWidth: params.borderWidth, padding: params.padding, margin: params.margin, lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });
                 }
