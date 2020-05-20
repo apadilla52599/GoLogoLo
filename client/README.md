@@ -7,7 +7,11 @@ mutation {
     text: "sample text",
     color: "#ff33dd",
     backgroundColor: "#00ff00",
-    fontSize: 44
+    fontSize: 44,
+    textList: [{//enter text object -- check logoschema for text}],
+    imgList: [{//enter img object -- check logoschema for text}],
+    height: 344,
+    width 355,
     borderColor:"#ff00ff",
     borderRadius:40,
     borderWidth:40,
@@ -28,6 +32,10 @@ mutation{
       color: "#ffffff",
       backgroundColor: "#00ff00",
       fontSize: 40,
+      textList: [{//enter text object -- check logoschema for text}],
+      imgList: [{//enter img object -- check logoschema for text}],
+      height: 344,
+      width 355,
       borderColor: "#ff00ff",
       borderRadius: 40,
       borderWidth: 40,
@@ -45,6 +53,10 @@ keep in mind that ID must be a valid ID for a logo that already exists in the da
   logo(id: "") {
     _id
     text
+    texList
+    imgList
+    height
+    width
     backgroundColor
     borderColor
     borderWidth

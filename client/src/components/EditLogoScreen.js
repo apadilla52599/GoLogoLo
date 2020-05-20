@@ -329,7 +329,7 @@ class EditLogoScreen extends Component {
     }
 
     handleConfirm = (event) =>{
-        let result = window.confirm("Download Image?");
+        let result = window.confirm("Download Image ? (NOTE: make sure everything is within border canvas for your download)");
         if (result === true){
             console.log("DOWNLOAD")
             let node = this.state.reference.current
