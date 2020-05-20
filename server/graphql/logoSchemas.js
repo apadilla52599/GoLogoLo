@@ -168,61 +168,6 @@ var imgTypeInput = new GraphQLInputObjectType({
 });
 
 
-
-// var imgType = new GraphQLObjectType({
-//     name: 'img',
-//     fields: function(){
-//         return{
-//             id: {
-//                 GraphQLInt
-//             },
-//             imgURL: {
-//                 GraphQLString
-//             },
-//             height: {
-//                 GraphQLInt
-//             },
-//             width: {
-//                 GraphQLInt
-//             },
-//             top: {
-//                 GraphQLInt
-//             },
-//             right: {
-//                 GraphQLInt
-//             }
-//         }
-//     }
-
-// });
-
-// var imgTypeInput = new GraphQLInputObjectType({
-//     name: 'imgInput',
-//     fields: function(){
-//         return{
-//             id: {
-//                 GraphQLInt
-//             },
-//             imgURL: {
-//                 GraphQLString
-//             },
-//             height: {
-//                 GraphQLInt
-//             },
-//             width: {
-//                 GraphQLInt
-//             },
-//             top: {
-//                 GraphQLInt
-//             },
-//             right: {
-//                 GraphQLInt
-//             }
-//         }
-//     }
-
-// });
-
 var queryType = new GraphQLObjectType({
     name: 'Query',
     fields: function () {

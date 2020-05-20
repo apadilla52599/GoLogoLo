@@ -4,6 +4,7 @@ import  Dropdown  from 'react-dropdown';
 import 'react-dropdown/style.css';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
+import domtoimage from "dom-to-image";
 
 
 const GET_LOGO = gql`
@@ -93,8 +94,9 @@ class EditLogoScreen extends Component {
             borderWidth: null,
             padding: null,
             margin: null,
+            reference: React.createRef()
 
-            //outdated
+           
         }
     }
 
@@ -182,25 +184,26 @@ class EditLogoScreen extends Component {
 
     }
 
-    setTextProperies = (intid) =>{
+    setTextProperies = () =>{
         console.log(this.state)
         let temptex = ''
         let tempcol = ''
         let tempfont = 0
         let tempposx = 0
         let tempposy = 0
-        for(let i = 0; i < this.state.textList.length;i++){
-            if( intid === this.state.textList[i].id){
-                console.log("stinky poop")
-                console.log(intid)
-                temptex = this.state.textList[i].textName
-                tempcol = this.state.textList[i].color
-                tempfont = this.state.textList[i].fontSize
-                tempposx = this.state.textList[i].right
-                tempposy = this.state.textList[i].top
+        // for(let i = 0; i < this.state.textList.length;i++){
+        //     if( intid === this.state.textList[i].id){
+            
+                console.log("did it work?")
+                console.log()
+                temptex = this.state.textList[0].textName
+                tempcol = this.state.textList[0].color
+                tempfont = this.state.textList[0].fontSize
+                tempposx = this.state.textList[0].right
+                tempposy = this.state.textList[0].top
                 console.log(temptex,tempcol,tempfont,tempposx,tempposy)
-            }
-        }
+            // }
+        // }
         this.setState({text: temptex, textColor: tempcol, fontSize: tempfont, top: tempposy, right: tempposx})
        
     }
@@ -214,7 +217,6 @@ class EditLogoScreen extends Component {
     }
     
     handleNew = (event) =>{
-        console.log("needs implementation")
         // calculate last ID and then add one to it 
         // create new one with default settings
         let temp = 0
@@ -244,7 +246,7 @@ class EditLogoScreen extends Component {
             temparr.splice(index,1)
             this.setState({textList: temparr})
             if(this.state.textList.length > 1){
-            this.setTextProperies(0);
+            this.setTextProperies();
             }
         }
     }
@@ -262,7 +264,6 @@ class EditLogoScreen extends Component {
         this.setState({imgList: temparr})
         
         if(temparr.length >1){
-        this.setTextProperies(0);
         }
     }
     }
@@ -288,7 +289,6 @@ class EditLogoScreen extends Component {
     }
 
     handleURLChange = (event) => {
-        // console.log('URL CHANGE')
         console.log(event.target.value)
         this.setState({imgURL: event.target.value})
     }
@@ -328,13 +328,28 @@ class EditLogoScreen extends Component {
         this.setState({imgWidth: event.target.value, imgList: this.state.imgList.map(img=>{img.id === this.state.currentImgID ? img.width = parseInt(event.target.value): console.log() ; return img})})
     }
 
+    handleConfirm = (event) =>{
+        let result = window.confirm("Download Image?");
+        if (result === true){
+            console.log("DOWNLOAD")
+            let node = this.state.reference.current
+            domtoimage.toJpeg(node, { quality: 0.99, bgcolor: "#ffffff" })
+                .then(function (dataUrl) {
+                var link = document.createElement('a');
+                link.download = 'my-image-name.jpeg';
+                link.href = dataUrl;
+                link.click();
+                });
+        }
+    }   
+
     
 
     render() {
         let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, right, top, height, width;
         const styles = {
             container: {
-                //CHANGE
+
                 height: this.state.height + "px",
                 width: this.state.width + "px",
                 color: this.state.textColor,
@@ -355,10 +370,8 @@ class EditLogoScreen extends Component {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     if(this.state.flag === false){
-                        //// CHANGE                         vvvvvvvvvvvvv                             vvvvvvvvv this should end up being data.logo.textList[0]
-                        this.setState({text: data.logo.text, flag: true, textList: data.logo.textList, imgList: data.logo.imgList, top : data.logo.textList[0].top, right: data.logo.textList[0].right, textColor: data.logo.color, fontSize: data.logo.fontSize, height: data.logo.height, width: data.logo.width, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin}) //CHANGE OCCURED
-                        // this.setState({...data.logo}, () => console.log(this.state))
-                        /// you changed textList to data.logo.text when it should be data.logo.textList, this is only working because you only have one text.
+            
+                        this.setState({text: data.logo.textList[0].textName, flag: true, textList: data.logo.textList, imgList: data.logo.imgList, top : data.logo.textList[0].top, right: data.logo.textList[0].right, textColor: data.logo.textList[0].color, fontSize: data.logo.textList[0].fontSize, height: data.logo.height, width: data.logo.width, backgroundColor: data.logo.backgroundColor, borderColor: data.logo.borderColor, borderRadius: data.logo.borderRadius, borderWidth: data.logo.borderWidth, padding: data.logo.padding, margin: data.logo.margin})
                         
                     }
                     return (
@@ -369,7 +382,7 @@ class EditLogoScreen extends Component {
                                     <div className = "col-sm-4">
                                     <div className="card">
                                         <div className="card-header">
-                                            <a href="/" className="btn btn-light" > Home </a>
+                                            <a href="/" className="btn btn-light" > Home </a><button type="button" className="btn btn-light" onClick={this.handleConfirm} >Download</button>
                                             <h3 className="panel-title">
                                                 Edit Logo
                                         </h3>
@@ -377,18 +390,20 @@ class EditLogoScreen extends Component {
                                         <div className="panel-body">                                            
                                             <form onSubmit={e => {
                                                 e.preventDefault();
-                                                let cleaned = JSON.parse(JSON.stringify(this.state.textList))
-
-                                                // Strip __typename from uiParent and item list
+                                                let cleaned = JSON.parse(JSON.stringify(this.state.textList))       
                                                 delete cleaned.__typename
                                                 cleaned.map((item) => (
-                                                    // eslint-disable-next-line no-param-reassign
                                                     delete item.__typename
                                                 ))
-                                                // BIG CHANGE                                          vvvvvvvvvvvvvvvvvvvv THERE 
-                                                updateLogo({ variables: { id: data.logo._id, textList: cleaned, text: this.state.text , color: this.state.textColor, imgList: this.state.imgList,backgroundColor: backgroundColor.value,fontSize: parseInt(this.state.fontSize), height: parseInt(this.state.height), width: parseInt(this.state.width), borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
-                                                // EVENTUALLY YOU WANNA DO WHAT THEYRE DOING DOWN THERE
-                                                // VVVVVVVVVVVVV
+                                                let cleanedimg = JSON.parse(JSON.stringify(this.state.imgList))
+                                                delete cleanedimg.__typename
+                                                cleanedimg.map((item) => (
+                                                    delete item.__typename
+                                                ))
+
+                                               
+                                                updateLogo({ variables: { id: data.logo._id, textList: cleaned, text: this.state.text , color: this.state.textColor, imgList: cleanedimg,backgroundColor: backgroundColor.value,fontSize: parseInt(this.state.fontSize), height: parseInt(this.state.height), width: parseInt(this.state.width), borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value) } });
+                                                
                                                 text.value = "";
                                                 color.value = "";
                                                 fontSize.value = "";
@@ -515,11 +530,27 @@ class EditLogoScreen extends Component {
                                     </div>
                                     </div>
                                     <div className = "col-sm-8">
+                                        <div style={{height:700, width: 900, borderStyle: "ridge", borderColor: "#DCDCDC"}}ref = {this.state.reference} >
                                         <div style={ styles.container } >
                                         </div>
                                         {console.log(this.state.imgList)}
                                         {this.state.textList.map(textobj => (<div  style={{color: textobj.color, fontSize: textobj.fontSize, position: "absolute", top: textobj.top + "px", right: textobj.right + "px"}}> {textobj.textName} </div>))}
                                         {this.state.imgList.map(img =>(<img id={img.id} onClick={this.handleImgSelect} src={img.imgURL} style={{position: "absolute", height: img.height, width: img.width, top: img.top, right: img.right}}></img>))}
+                                        {/* {this.state.imgList.map(img =>(<Draggable
+                                            handle=".handle"
+                                        
+                                            defaultPosition={{x: img.top, y: img.right}}
+                                            position={null}
+                                            grid={[25, 25]}
+                                            scale={1}
+                                            onStart={this.handleStart}
+                                            onDrag={this.handleDrag}
+                                            onStop={this.handleStop}>
+                                            
+                                            <img src={img.imgURL} className="handle"></img>
+                                            
+                                        </Draggable>))} */}
+                                        </div>
                                     </div>
                                     </div>
                                 </div>

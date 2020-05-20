@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import domtoimage from "dom-to-image";
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -35,6 +36,30 @@ const DELETE_LOGO = gql`
 `;
 
 class ViewLogoScreen extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { 
+            reference: React.createRef()
+
+            //outdated
+        }
+    }
+
+    handleConfirm = (event) =>{
+        let result = window.confirm("Download Image?");
+        if (result === true){
+            console.log("DOWNLOAD")
+            let node = this.state.reference.current
+            domtoimage.toJpeg(node, { quality: 0.99, bgcolor: "#ffffff" })
+                .then(function (dataUrl) {
+                var link = document.createElement('a');
+                link.download = 'my-image-name.jpeg';
+                link.href = dataUrl;
+                link.click();
+                });
+        }
+    }   
     
 
     render() {
@@ -45,7 +70,7 @@ class ViewLogoScreen extends Component {
                     if (error) return `Error! ${error.message}`;
                     const styles = {
                         container: {
-                            // CHANGE
+                            
                             height: data.logo.height,
                             width: data.logo.width,
                             fontSize: data.logo.fontSize + 'pt',
@@ -80,7 +105,7 @@ class ViewLogoScreen extends Component {
                                         <dt>Last Updated:</dt>
                                         <dd>{data.logo.lastUpdate}</dd>
                                         <dt>Height:</dt>
-                                        <dd>{data.logo.Height}</dd>
+                                        <dd>{data.logo.height}</dd>
                                         <dt>Width:</dt>
                                         <dd>{data.logo.width}</dd>
                                         <dt>Background Color:</dt>
@@ -105,7 +130,8 @@ class ViewLogoScreen extends Component {
                                                         removeLogo({ variables: { id: data.logo._id } });
                                                     }}>
                                                     <Link to={`/edit/${data.logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
-                                                <button type="submit" className="btn btn-danger">Delete</button>
+                                                <button type="submit" className="btn btn-danger">Delete</button>&nbsp;
+                                                <button type="button" className="btn btn-primary" onClick={this.handleConfirm} >Download</button>
                                                 </form>
                                                 {loading && <p>Loading...</p>}
                                                 {error && <p>Error :( Please try again</p>}
@@ -115,11 +141,13 @@ class ViewLogoScreen extends Component {
                                 </div>
                             </div></div>
                             <div className="col-sm-8" style={{overflow: 'auto'}}>
+                            <div style={{height:700, width: 900}}ref = {this.state.reference} >
                                 <div style={ styles.container  } >
                                 </div>
                                 {data.logo.textList.map(textobj => (<div  style={{color: textobj.color, fontSize: textobj.fontSize, position: "absolute", top: textobj.top + "px", right: textobj.right + "px"}}> {textobj.textName} </div>))}
                                 {data.logo.imgList.map(img =>(<img id={img.id} onClick={this.handleImgSelect} src={img.imgURL} style={{position: "absolute", height: img.height, width: img.width, top: img.top, right: img.right}}></img>))}
                             </div></div>
+                            </div>
                         </div>
                     );
                 }}

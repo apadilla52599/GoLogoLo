@@ -162,18 +162,17 @@ class CreateLogoScreen extends Component {
         let tempfont = 0
         let tempposx = 0
         let tempposy = 0
-        for(let i = 0; i < this.state.textList.length;i++){
-            if( intid === this.state.textList[i].id){
-                console.log("stinky poop")
-                console.log(intid)
-                temptex = this.state.textList[i].textName
-                tempcol = this.state.textList[i].color
-                tempfont = this.state.textList[i].fontSize
-                tempposx = this.state.textList[i].right
-                tempposy = this.state.textList[i].top
+        // for(let i = 0; i < this.state.textList.length;i++){
+        //     if( intid === this.state.textList[i].id){
+                console.log("did it work?")
+                temptex = this.state.textList[0].textName
+                tempcol = this.state.textList[0].color
+                tempfont = this.state.textList[0].fontSize
+                tempposx = this.state.textList[0].right
+                tempposy = this.state.textList[0].top
                 console.log(temptex,tempcol,tempfont,tempposx,tempposy)
-            }
-        }
+        //     }
+        // }
         this.setState({text: temptex, textColor: tempcol, fontSize: tempfont, top: tempposy, right: tempposx})
        
     }
@@ -187,7 +186,7 @@ class CreateLogoScreen extends Component {
     }
     
     handleNew = (event) =>{
-        console.log("needs implementation")
+        
         // calculate last ID and then add one to it 
         // create new one with default settings
         let temp = 0
@@ -207,6 +206,7 @@ class CreateLogoScreen extends Component {
     }
     
     handleDeleteText = (event) =>{
+        if(this.state.textList.length >1){
         var temparr = this.state.textList.slice()
         var index = 0;
         for(let i = 0; i <this.state.textList.length;i++){
@@ -216,7 +216,10 @@ class CreateLogoScreen extends Component {
         }
         temparr.splice(index,1)
         this.setState({textList: temparr})
-        this.setTextProperies(0);
+        if(this.state.textList.length > 1){
+            this.setTextProperies();
+            }
+    }
     }
 
     handleDeleteImg = (event) =>{
@@ -232,7 +235,6 @@ class CreateLogoScreen extends Component {
         this.setState({imgList: temparr})
         
         if(temparr.length >1){
-        this.setTextProperies(0);
         }
     }
     }
@@ -258,7 +260,6 @@ class CreateLogoScreen extends Component {
     }
 
     handleURLChange = (event) => {
-        // console.log('URL CHANGE')
         console.log(event.target.value)
         this.setState({imgURL: event.target.value})
     }
@@ -334,13 +335,18 @@ class CreateLogoScreen extends Component {
                                     e.preventDefault();
                                     let cleaned = JSON.parse(JSON.stringify(this.state.textList))
 
-                                    // Strip __typename from uiParent and item list
                                     delete cleaned.__typename
                                     cleaned.map((item) => (
-                                        // eslint-disable-next-line no-param-reassign
+                                       
                                         delete item.__typename
                                     ))
-                                    addLogo({ variables: { textList: cleaned, text: this.state.text, color: this.state.textColor, imgList: this.state.imgList, backgroundColor: backgroundColor.value, fontSize: parseInt(this.state.fontSize), height: parseInt(this.state.height), width: parseInt(this.state.width),  borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value)} });
+
+                                    let cleanedimg = JSON.parse(JSON.stringify(this.state.imgList))
+                                                delete cleanedimg.__typename
+                                                cleanedimg.map((item) => (
+                                                    delete item.__typename
+                                                ))
+                                    addLogo({ variables: { textList: cleaned, text: this.state.text, color: this.state.textColor, imgList: cleanedimg, backgroundColor: backgroundColor.value, fontSize: parseInt(this.state.fontSize), height: parseInt(this.state.height), width: parseInt(this.state.width),  borderColor: borderColor.value, borderRadius: parseInt(borderRadius.value), borderWidth: parseInt(borderWidth.value), padding: parseInt(padding.value), margin: parseInt(margin.value)} });
                                     text.value = "";
                                     color.value = "";
                                     fontSize.value = "";
