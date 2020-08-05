@@ -38,14 +38,14 @@ Would you like to run the app on another port instead? (Y/n): type Y ->
 Navigate to: http://localhost:3001/`
 
 GoLogoLo Home:
-![Image of goLogoLo](goLogoLoHome.JPG)
+![Image of goLogoLo](imgs/goLogoLoHome.JPG)
 
 GoLogoLo Create:
-![Image of goLogoLo](goLogoLoCreate.JPG)
+![Image of goLogoLo](imgs/goLogoLoCreate.JPG)
 
 GoLogoLo Edit:
-![Image of goLogoLo](goLogoLoEdit1.JPG)
-![Image of goLogoLo](goLogoLoEdit2.JPG)
+![Image of goLogoLo](imgs/goLogoLoEdit1.JPG)
+![Image of goLogoLo](imgs/goLogoLoEdit2.JPG)
 
 
 
